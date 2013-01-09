@@ -500,11 +500,11 @@ void show_dump()
 		(read_w83627_reg(RUNTIME_BYPASS_PAIR2_LDN, RUNTIME_BYPASS_PAIR2_REG) &
 		 RUNTIME_BYPASS_PAIR2_ENABLE)?
 		"enabled" : "disabled");
-	printf("off-mode bypass pair 1: %s (%x) (raw: %x)\n",
+	printf("off-mode bypass pair 1: %s\n",
 		((read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) & OFFMODE_BYPASS_PAIR1_BIT) &
 		 OFFMODE_BYPASS_PAIR1_ENABLE)?
 		"enabled" : "disabled");
-	printf("off-mode bypass pair 2: %s (%x) (raw: %x)\n",
+	printf("off-mode bypass pair 2: %s\n",
 		((read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) & OFFMODE_BYPASS_PAIR2_BIT) &
 		 OFFMODE_BYPASS_PAIR2_ENABLE)?
 		"enabled" : "disabled");
