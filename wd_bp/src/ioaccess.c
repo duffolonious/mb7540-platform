@@ -172,7 +172,7 @@
  *	2	Disable			GPO31 =0
  *
  *	Note: To sete runtime bypass mode, user need to set off-mode bypass
- *            enabled in order to let function activity.
+ *	    enabled in order to let function activity.
  *	
  *------------------------------------------------------------------------------
 
@@ -198,42 +198,41 @@
 
 void enter_w83627_config(void)
 {
-        outportb(INDEX_PORT, 0x87); // Must Do It Twice
-        outportb(INDEX_PORT, 0x87);
-        return;
+	outportb(INDEX_PORT, 0x87); // Must Do It Twice
+	outportb(INDEX_PORT, 0x87);
+	return;
 }
 
 
 void exit_w83627_config(void)
 {
-        outportb(INDEX_PORT, 0xAA);
-        return;
+	outportb(INDEX_PORT, 0xAA);
+	return;
 }
 
 unsigned char read_w83627_reg(int LDN, int reg)
 {
-        unsigned char tmp = 0;
+	unsigned char tmp = 0;
 
-
-        enter_w83627_config();
-        outportb(INDEX_PORT, 0x07); // LDN Register
-        outportb(DATA_PORT, LDN); // Select LDNx
-        outportb(INDEX_PORT, reg); // Select Register
-        tmp = inportb( DATA_PORT ); // Read Register
-        exit_w83627_config();
-        return tmp;
+	enter_w83627_config();
+	outportb(INDEX_PORT, 0x07); // LDN Register
+	outportb(DATA_PORT, LDN); // Select LDNx
+	outportb(INDEX_PORT, reg); // Select Register
+	tmp = inportb( DATA_PORT ); // Read Register
+	exit_w83627_config();
+	return tmp;
 }
 
 
 void write_w83627_reg(int LDN, int reg, int value)
 {
-        enter_w83627_config();
-        outportb(INDEX_PORT, 0x07); // LDN Register
-        outportb(DATA_PORT, LDN); // Select LDNx
-        outportb(INDEX_PORT, reg); // Select Register
-        outportb(DATA_PORT, value); // Write Register
-        exit_w83627_config();
-        return;
+	enter_w83627_config();
+	outportb(INDEX_PORT, 0x07); // LDN Register
+	outportb(DATA_PORT, LDN); // Select LDNx
+	outportb(INDEX_PORT, reg); // Select Register
+	outportb(DATA_PORT, value); // Write Register
+	exit_w83627_config();
+	return;
 }
 
 
@@ -336,7 +335,6 @@ int wd_gpio_init(void)
 
 void set_bypass_enable_when_system_off(unsigned long pair_no)
 {
-
 	int reg_no, ldn_no;
 	unsigned char bit_mask;
 	unsigned char en_data;
@@ -371,7 +369,6 @@ void set_bypass_enable_when_system_off(unsigned long pair_no)
 
 void set_bypass_disable_when_system_off(unsigned long pair_no)
 {
-
 	int reg_no, ldn_no;
 	unsigned char bit_mask;
 	unsigned char en_data;
@@ -406,32 +403,32 @@ void set_bypass_disable_when_system_off(unsigned long pair_no)
 void set_runtime_bypass_enable(unsigned long pair_no)
 {
 	int reg_no, ldn_no;
-        unsigned char tmp, bit_mask, en_data;
+	unsigned char tmp, bit_mask, en_data;
 
 	reg_no=ldn_no=bit_mask=en_data=tmp=0;
 /*      Note: To sete runtime bypass mode, user need to set off-mode bypass
- *            enabled in order to let function activity.
+ *	    enabled in order to let function activity.
  */
-        set_bypass_enable_when_system_off(pair_no);
+	set_bypass_enable_when_system_off(pair_no);
 
-        switch(pair_no) {
-        	case BYPASS_PAIR_1:
+	switch(pair_no) {
+		case BYPASS_PAIR_1:
 			ldn_no = RUNTIME_BYPASS_PAIR1_LDN;
 			reg_no = RUNTIME_BYPASS_PAIR1_REG;
-                        bit_mask = RUNTIME_BYPASS_PAIR1_BIT;
-                        en_data = RUNTIME_BYPASS_PAIR1_ENABLE;
-                        break;
-                case BYPASS_PAIR_2:
+			bit_mask = RUNTIME_BYPASS_PAIR1_BIT;
+			en_data = RUNTIME_BYPASS_PAIR1_ENABLE;
+			break;
+		case BYPASS_PAIR_2:
 			ldn_no = RUNTIME_BYPASS_PAIR2_LDN;
 			reg_no = RUNTIME_BYPASS_PAIR2_REG;
-                        bit_mask = RUNTIME_BYPASS_PAIR2_BIT;
-                        en_data = RUNTIME_BYPASS_PAIR2_ENABLE;
-                        break;
+			bit_mask = RUNTIME_BYPASS_PAIR2_BIT;
+			en_data = RUNTIME_BYPASS_PAIR2_ENABLE;
+			break;
 		default:
 			/*un-support pair no, return */
 			return;
 
-        }
+	}
 	tmp=read_w83627_reg(ldn_no, reg_no);
 	tmp &= ~(bit_mask) ;
 	tmp |= en_data;
@@ -442,7 +439,6 @@ void set_runtime_bypass_enable(unsigned long pair_no)
 
 void set_runtime_bypass_disable(unsigned long pair_no)
 {
-
 	int reg_no, ldn_no;
 	unsigned char tmp, bit_mask, en_data;
 
@@ -461,7 +457,7 @@ void set_runtime_bypass_disable(unsigned long pair_no)
 		bit_mask = RUNTIME_BYPASS_PAIR2_BIT;
 		en_data = RUNTIME_BYPASS_PAIR2_DISABLE;
 		break;
-        }
+	}
 	tmp=read_w83627_reg(ldn_no, reg_no);
 	tmp &= ~(bit_mask) ;
 	tmp |= en_data;
@@ -504,16 +500,14 @@ void show_dump()
 		(read_w83627_reg(RUNTIME_BYPASS_PAIR2_LDN, RUNTIME_BYPASS_PAIR2_REG) &
 		 RUNTIME_BYPASS_PAIR2_ENABLE)?
 		"enabled" : "disabled");
-	printf("off-mode bypass pair 1: %s\n",
-		(read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) &
-		 (OFFMODE_BYPASS_PAIR1_ENABLE|!OFFMODE_BYPASS_PAIR1_DISABLE))?
-		"enabled" : "disabled",
-    read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) & ~OFFMODE_BYPASS_PAIR1_BIT);
-	printf("off-mode bypass pair 2: %s\n",
-		(read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) &
-		 (OFFMODE_BYPASS_PAIR2_ENABLE|!OFFMODE_BYPASS_PAIR2_DISABLE))?
-		"enabled" : "disabled",
-    read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) & ~OFFMODE_BYPASS_PAIR2_BIT);
+	printf("off-mode bypass pair 1: %s (%x) (raw: %x)\n",
+		((read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) & OFFMODE_BYPASS_PAIR1_BIT) &
+		 OFFMODE_BYPASS_PAIR1_ENABLE)?
+		"enabled" : "disabled");
+	printf("off-mode bypass pair 2: %s (%x) (raw: %x)\n",
+		((read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) & OFFMODE_BYPASS_PAIR2_BIT) &
+		 OFFMODE_BYPASS_PAIR2_ENABLE)?
+		"enabled" : "disabled");
 	printf("watchdog timer state : %s\n", //bypass or reset
 		(read_w83627_reg(0x9, 0xF1) & SIO_GPIO_36_BIT)?
 		"reset" : "bypass");
