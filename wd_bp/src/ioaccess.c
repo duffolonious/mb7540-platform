@@ -506,12 +506,14 @@ void show_dump()
 		"enabled" : "disabled");
 	printf("off-mode bypass pair 1: %s\n",
 		(read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) &
-		 OFFMODE_BYPASS_PAIR1_ENABLE)?
-		"enabled" : "disabled");
+		 (OFFMODE_BYPASS_PAIR1_ENABLE|!OFFMODE_BYPASS_PAIR1_DISABLE))?
+		"enabled" : "disabled",
+    read_w83627_reg(OFFMODE_BYPASS_PAIR1_LDN, OFFMODE_BYPASS_PAIR1_REG) & ~OFFMODE_BYPASS_PAIR1_BIT);
 	printf("off-mode bypass pair 2: %s\n",
 		(read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) &
-		 OFFMODE_BYPASS_PAIR2_ENABLE)?
-		"enabled" : "disabled");
+		 (OFFMODE_BYPASS_PAIR2_ENABLE|!OFFMODE_BYPASS_PAIR2_DISABLE))?
+		"enabled" : "disabled",
+    read_w83627_reg(OFFMODE_BYPASS_PAIR2_LDN, OFFMODE_BYPASS_PAIR2_REG) & ~OFFMODE_BYPASS_PAIR2_BIT);
 	printf("watchdog timer state : %s\n", //bypass or reset
 		(read_w83627_reg(0x9, 0xF1) & SIO_GPIO_36_BIT)?
 		"reset" : "bypass");
